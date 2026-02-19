@@ -1,4 +1,4 @@
-use crate::hamiltonian;
+use crate::hamiltonian::get_hamiltonian;
 
 pub struct Switch {
     ports_number: usize,
@@ -25,16 +25,14 @@ impl Switch {
         self.queue[input_port][output_port] += 1;
         self.packets_number += 1;
     }
- 
+
     pub fn next_match(&mut self) {
         let (I, J, best_neighbor_cost) = self.get_best_neighbor();
-        let (ham_matching, ham_cost) = self.get_hamiltonian();
-        
     }
 
-    fn get_best_neighbor(&self) -> (usize, usize, u32) {
+    fn get_best_neighbor(&self, &mut matching) -> u32 {
         let (mut I, mut J) = (0, 0);
-        let cost = self.get_cost();
+        let cost = self.get_cost(&self.matching);
         let mut max_cost = cost;
 
         for i in 0..self.ports_number {
@@ -54,16 +52,11 @@ impl Switch {
         (I, J, cost)
     }
 
-    fn get_cost(&self) -> u32 {
-        self.get_cost_for_matching(&self.matching)
-    }
-
-    fn get_cost_for_matching(&self, matching: &[usize]) -> u32 {
-        let mut res = 0;
+    fn get_cost(&self, matching: &Vec<usize>) -> u32 {
+        let mut res: u32 = 0;
         for (i, &out_port) in matching.iter().enumerate() {
             res += self.queue[i][out_port];
         }
         res
     }
- 
 }

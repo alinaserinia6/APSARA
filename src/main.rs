@@ -1,6 +1,7 @@
 use dialoguer::{Input, theme::ColorfulTheme};
 use rand::RngExt;
 
+mod hamiltonian;
 mod switch;
 use switch::Switch;
 
@@ -20,6 +21,7 @@ fn main() {
     }
 }
 
+/// Get User Inputs (number of tests, number of ports, load percent)
 fn get_input() -> (u32, usize, u8) {
     let test_numbers: u32 = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("1. test numbers: ")
